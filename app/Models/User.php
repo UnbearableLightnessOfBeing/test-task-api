@@ -6,8 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class User extends Model 
 {
+    use \Backpack\CRUD\app\Models\Traits\CrudTrait;
     use HasFactory;
 
     /**
@@ -20,5 +21,6 @@ class User extends Model
         'user_name',
         'email',
     ];
+
 
 }
