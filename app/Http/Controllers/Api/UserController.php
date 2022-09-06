@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -18,7 +20,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all(); //shouldn't be here
     }
 
     /**
@@ -29,7 +30,8 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        return new UserResource(User::create($request->all()));
+        $user =  new UserResource(User::create($request->all()));
+        return $this->createdResponse($user);
     }   
 
     /**
@@ -40,6 +42,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        if($user->is_blocked) {
+            return $this->userIsBlockedResponse();
+        }
         return new UserResource($user);
     }
 
@@ -52,7 +57,23 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
+        if($user->is_blocked) {
+            return $this->userIsBlockedResponse();
+        }
+
+        $validator = Validator::make($request->all(), [
+            'user_name' => Rule::unique('users', 'user_name')->ignore($user->id)
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->first(),
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
         $user->update($request->all());
+        return $this->successfulResponse();
     }
 
     /**
@@ -63,6 +84,41 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if($user->is_blocked) {
+            return $this->userIsBlockedResponse();
+        }
+
+        $userName = $user->user_name;
         $user->delete();
+        return $this->deletedResponse($userName);
+
+    }
+
+    protected function userIsBlockedResponse() {
+        return response()->json([
+            'message' => 'User is blocked',
+            'error' => 'The resource is forbidden',
+        ], 403);
+    }
+
+    protected function successfulResponse() {
+        return response()->json([
+            'message' => 'User has been updated',
+            'status' => 'Success',
+        ], 200);
+    }
+
+    protected function createdResponse(UserResource $user) {
+        return response()->json([
+            'message' => 'User has been created',
+            'status' => 'Success',
+            'user' => $user
+        ], 200);
+    }
+    protected function deletedResponse(string $userName) {
+        return response()->json([
+            'message' => 'User "' . $userName . '" has been deleted',
+            'status' => 'Success'
+        ], 200);
     }
 }

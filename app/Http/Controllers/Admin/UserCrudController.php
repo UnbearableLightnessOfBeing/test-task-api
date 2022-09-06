@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\BackpackUpdateUserRequest;
+use App\Http\Requests\BackpackCreateUserRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+
+use Illuminate\Validation\Rule;
 
 /**
  * Class UserCrudController
@@ -42,6 +45,9 @@ class UserCrudController extends CrudController
         CRUD::column('name');
         CRUD::column('user_name');
         CRUD::column('email');
+        CRUD::column('is_blocked')->type('boolean')->label('Blocked');
+
+        
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -58,10 +64,18 @@ class UserCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(UserRequest::class);
+        $rules = [
+            'email' => ['required', 'email', 'unique:App\Models\User'],
+            'user_name' => ['required', 'unique:App\Models\User', 'regex:/^[\w\d.-]*$/']
+        ];
+
+
+        CRUD::setValidation($rules);
 
         CRUD::field('name');
         CRUD::field('user_name');
+        CRUD::field('email');
+        
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
@@ -77,6 +91,25 @@ class UserCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+    
+        $userId = $this->getUserIdFromUri();    
+
+        $rules = [
+            'user_name' => ['required', 'regex:/^[\w\d.-]*$/', Rule::unique('users', 'user_name')->ignore($userId)],
+            'name' => ['sometimes'],
+            'is_blocked' => ['sometimes']
+        ];
+
+        CRUD::setValidation($rules);
+
+        CRUD::field('name');
+        CRUD::field('user_name');
+        CRUD::field('is_blocked')->label('Block User');
+    }
+
+    protected function getUserIdFromUri(): int {
+        $str = $this->crud->getRequest()->server('REQUEST_URI');
+        preg_match_all('!\d+!', $str, $matches);
+        return (int) $matches[0][0];
     }
 }

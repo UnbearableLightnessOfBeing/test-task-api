@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
 class UpdateUserRequest extends FormRequest
 {
     /**
@@ -26,12 +27,12 @@ class UpdateUserRequest extends FormRequest
         $method = $this->method();
         if($method == 'PUT') {
             return [
-                'user_name' => ['required', 'unique:App\Models\User', 'regex:/^\p{Latin}+$/'],
+                'user_name' => ['required', 'regex:/^[\w\d.-]*$/'],
                 'name' => ['required'],
             ];
         } else {
             return [
-                'user_name' => ['sometimes', 'unique:App\Models\User', 'regex:/^\p{Latin}+$/'],
+                'user_name' => ['sometimes', 'regex:/^[\w\d.-]*$/'],
                 'name' => ['sometimes'],
             ];
         }

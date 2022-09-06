@@ -20,6 +20,7 @@ class User extends Model
         'name',
         'user_name',
         'email',
+        'is_blocked',
     ];
 
 

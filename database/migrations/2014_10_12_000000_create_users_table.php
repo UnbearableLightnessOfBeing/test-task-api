@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('user_name')->unique();
             $table->string('email')->unique();
+            $table->boolean('is_blocked')->default(false);
             $table->timestamps();
         });
     }
