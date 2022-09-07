@@ -48,7 +48,7 @@ php artisan serve
 
 ## API methods: 
 
-post - .../api/User-1
+post - .../api/User-{user id}
 -
 Required: "email" "userName" Optional: "name"  =>  
 Creates a new user
