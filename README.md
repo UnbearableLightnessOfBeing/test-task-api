@@ -49,7 +49,8 @@ php artisan serve
 API methods: 
 
 post - .../api/User-1
-Required: "email" "userName" Optional: "name"
+-
+Required: "email" "userName" Optional: "name"  =>  
 Creates a new user
 
 get - .../api/User-{user id}
@@ -57,11 +58,13 @@ get - .../api/User-{user id}
 Gets user data
 
 put - .../api/User-{user id}
-Required: "userName" "name"
+-
+Required: "userName" "name"  =>  
 Edits user data
 
 patch - .../api/User-{user id}
-Optional: "name" "userName"
+-
+Optional: "name" "userName"  =>  
 Edits user data
 
 delete - .../api/User-{user id}
