@@ -46,7 +46,7 @@ php artisan seed
 php artisan serve
 ```
 
-##API methods: 
+## API methods: 
 
 post - .../api/User-1
 -
