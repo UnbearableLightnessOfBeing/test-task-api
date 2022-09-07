@@ -92,7 +92,7 @@ class UserCrudController extends CrudController
     protected function setupUpdateOperation()
     {
     
-        $userId = $this->getUserIdFromUri();    
+        $userId = $this->crud->getCurrentEntry()['id'];    
 
         $rules = [
             'user_name' => ['required', 'regex:/^[\w\d.-]*$/', Rule::unique('users', 'user_name')->ignore($userId)],
@@ -107,9 +107,9 @@ class UserCrudController extends CrudController
         CRUD::field('is_blocked')->label('Block User');
     }
 
-    protected function getUserIdFromUri(): int {
-        $str = $this->crud->getRequest()->server('REQUEST_URI');
-        preg_match_all('!\d+!', $str, $matches);
-        return (int) $matches[0][0];
-    }
+    // protected function getUserIdFromUri(): int {
+    //     $str = $this->crud->getRequest()->server('REQUEST_URI');
+    //     preg_match_all('!\d+!', $str, $matches);
+    //     return (int) $matches[0][0];
+    // }
 }
