@@ -25,7 +25,7 @@ composer install
 php artisan key:generate
 ```
 
-3) Put required data in .env file (use .env.example as an example)
+3) Put required database credentials in .env file (use .env.example as an example)
 
 4) Create users and admins tables in your database with migration:
 
