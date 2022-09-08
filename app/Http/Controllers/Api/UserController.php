@@ -30,7 +30,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $user =  new UserResource(User::create($request->all()));
+        $user =  new UserResource(User::create($request->all('email', 'name', 'user_name')));
         return $this->createdResponse($user);
     }   
 
@@ -62,7 +62,7 @@ class UserController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'user_name' => Rule::unique('users', 'user_name')->ignore($user->id)
+            'user_name' => Rule::unique('users', 'user_name')->ignore($user->id),
         ]);
 
         if ($validator->fails()) {
@@ -72,7 +72,7 @@ class UserController extends Controller
             ], 422);
         }
 
-        $user->update($request->all());
+        $user->update($request->all('user_name', 'name'));
         return $this->successfulResponse();
     }
 
