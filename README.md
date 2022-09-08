@@ -71,5 +71,5 @@ delete - .../api/User-{user id}
 -
 Deletes a user
 
-Admmin panel access - .../admin
+Admin panel access - .../admin
 -
