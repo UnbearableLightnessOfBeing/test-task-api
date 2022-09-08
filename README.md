@@ -37,7 +37,7 @@ php artisan migrate
 The next command will generate 20 users and put it in the users table:
 
 ``` bash
-php artisan seed
+php artisan db:seed
 ```
 
 5) Run development server:
