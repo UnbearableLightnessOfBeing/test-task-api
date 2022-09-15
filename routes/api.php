@@ -25,10 +25,10 @@ use App\Http\Controllers\Api\UserController;
 //     ]]);
 // });
 
-Route::post('User/Register', [UserController::class, 'store']);
-Route::get('User-{user}', [UserController::class, 'show']);
-Route::put('User-{user}', [UserController::class, 'update']);
-Route::patch('User-{user}', [UserController::class, 'update']);
-Route::delete('User-{user}', [UserController::class, 'destroy']);
+Route::post('users/register', [UserController::class, 'store']);
+Route::get('users/{user}', [UserController::class, 'show'])->middleware(['userIsAuthorized', 'userIsBlocked']);
+Route::put('users/{user}', [UserController::class, 'update'])->middleware(['userIsAuthorized', 'userIsBlocked']);
+Route::patch('users/{user}', [UserController::class, 'update'])->middleware(['userIsAuthorized', 'userIsBlocked']);
+Route::delete('users/{user}', [UserController::class, 'destroy'])->middleware(['userIsAuthorized', 'userIsBlocked']);
 
 

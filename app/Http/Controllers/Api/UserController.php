@@ -42,9 +42,6 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if($user->is_blocked) {
-            return $this->userIsBlockedResponse();
-        }
         return new UserResource($user);
     }
 
@@ -57,10 +54,6 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        if($user->is_blocked) {
-            return $this->userIsBlockedResponse();
-        }
-
         $validator = Validator::make($request->all(), [
             'user_name' => Rule::unique('users', 'user_name')->ignore($user->id),
         ]);
@@ -84,21 +77,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if($user->is_blocked) {
-            return $this->userIsBlockedResponse();
-        }
-
         $userName = $user->user_name;
         $user->delete();
         return $this->deletedResponse($userName);
 
-    }
-
-    protected function userIsBlockedResponse() {
-        return response()->json([
-            'message' => 'User is blocked',
-            'error' => 'The resource is forbidden',
-        ], 403);
     }
 
     protected function successfulResponse() {
