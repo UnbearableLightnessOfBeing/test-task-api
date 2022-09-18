@@ -26,7 +26,6 @@ class StoreUserRequest extends FormRequest
         return [
             'email' => ['required', 'email', 'unique:App\Models\User'],
             'user_name' => ['required', 'unique:App\Models\User', 'regex:/^[\w\d.-]*$/'],
-            'name' => ['sometimes'],
         ];
     }
 

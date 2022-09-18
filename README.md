@@ -48,28 +48,32 @@ php artisan serve
 
 ## API methods: 
 
-post - .../api/User-{user id}
+post - .../api/users/register
 -
 Required: "email" "userName" Optional: "name"  =>  
 Creates a new user
 
-get - .../api/User-{user id}
+get - .../api/users/{id}
 -
 Gets user data
 
-put - .../api/User-{user id}
+put - .../api/users/{id}
 -
 Required: "userName" "name"  =>  
 Edits user data
 
-patch - .../api/User-{user id}
+patch - .../api/users/{id}
 -
 Optional: "name" "userName"  =>  
 Edits user data
 
-delete - .../api/User-{user id}
+delete - .../api/users/{id}
 -
 Deletes a user
+
+!!! Important !!!
+-
+User is considered authorized only if the http header has a heading "User-Id" with a respective user id value
 
 Admin panel access - .../admin
 -

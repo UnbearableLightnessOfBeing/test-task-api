@@ -17,6 +17,7 @@ class UserIsAuthorized
     public function handle(Request $request, Closure $next)
     {
 
+        //User is considered authorized only if the http header has a heading "User-Id" with a respective user id value
         if((int) $request->header('User-Id') == (int) $request->user->id) {
             return $next($request);
         }else {

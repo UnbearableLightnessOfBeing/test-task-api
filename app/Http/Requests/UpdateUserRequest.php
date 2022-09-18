@@ -33,7 +33,6 @@ class UpdateUserRequest extends FormRequest
         } else {
             return [
                 'user_name' => ['sometimes', 'regex:/^[\w\d.-]*$/'],
-                'name' => ['sometimes'],
             ];
         }
 

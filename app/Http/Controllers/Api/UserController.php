@@ -31,7 +31,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $user =  new UserResource(User::create($request->all('email', 'name', 'user_name')));
-        return $this->createdResponse($user);
+        return $this->successfulResponse('User has been created');
     }   
 
     /**
@@ -55,18 +55,15 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $validator = Validator::make($request->all(), [
-            'user_name' => Rule::unique('users', 'user_name')->ignore($user->id),
+            'user_name' => ['sometimes', Rule::unique('users', 'user_name')->ignore($user->id)]
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'message' => $validator->errors()->first(),
-                'errors' => $validator->errors(),
-            ], 422);
+          return $this->failedResponse($validator->errors()->first(), $validator->errors());
         }
 
-        $user->update($request->all('user_name', 'name'));
-        return $this->successfulResponse();
+        $user->update($request->all());
+        return $this->successfulResponse('User has been updated');
     }
 
     /**
@@ -79,28 +76,21 @@ class UserController extends Controller
     {
         $userName = $user->user_name;
         $user->delete();
-        return $this->deletedResponse($userName);
+        return $this->successfulResponse('User has been deleted');
 
     }
 
-    protected function successfulResponse() {
+    protected function successfulResponse($message, $error = 'Success') {
         return response()->json([
-            'message' => 'User has been updated',
-            'status' => 'Success',
+            'message' => $message,
+            'status' => $error,
         ], 200);
     }
 
-    protected function createdResponse(UserResource $user) {
+    protected function failedResponse($message, $error = 'Failed') {
         return response()->json([
-            'message' => 'User has been created',
-            'status' => 'Success',
-            'user' => $user
-        ], 200);
-    }
-    protected function deletedResponse(string $userName) {
-        return response()->json([
-            'message' => 'User "' . $userName . '" has been deleted',
-            'status' => 'Success'
-        ], 200);
+            'message' => $message,
+            'errors' => $error,
+        ], 422);
     }
 }

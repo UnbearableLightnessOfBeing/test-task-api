@@ -15,16 +15,6 @@ use App\Http\Controllers\Api\UserController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// // });
-// Route::group(['namespace' => 'App\Http\Controllers\Api'], function() {
-
-//     Route::apiResource('users', UserController::class, ['parameters' => [
-//         'users' => 'people'
-//     ]]);
-// });
-
 Route::post('users/register', [UserController::class, 'store']);
 Route::get('users/{user}', [UserController::class, 'show'])->middleware(['userIsAuthorized', 'userIsBlocked']);
 Route::put('users/{user}', [UserController::class, 'update'])->middleware(['userIsAuthorized', 'userIsBlocked']);
