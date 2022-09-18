@@ -45,7 +45,15 @@ class UserCrudController extends CrudController
         CRUD::column('name');
         CRUD::column('user_name');
         CRUD::column('email');
-        CRUD::column('is_blocked')->type('boolean')->label('Blocked');
+        CRUD::column('is_blocked')->type('boolean')->label('Blocked')->wrapper([
+            'element' => 'span',
+            'class'   => static function ($crud, $column, $entry) {
+                return 'badge badge-'.($entry->{$column['name']} ? 'danger' : 'success');
+            },
+        ]);
+        $this->crud->removeButton('create');
+        $this->crud->removeButton('delete');
+        $this->crud->removeButton('show');
 
         
 

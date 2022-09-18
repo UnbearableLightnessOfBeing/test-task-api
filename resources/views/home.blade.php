@@ -63,7 +63,7 @@
             <?php 
                 $registerPoint = [
                     'method' => 'post',
-                    'url' => '/User/Register',
+                    'url' => '/users/register',
                     'params' => [
                         'required' => ['email', 'userName'],
                         'optional' => ['name']
@@ -72,12 +72,12 @@
                 ];
                 $getPoint = [
                     'method' => 'get',
-                    'url' => '/User-{user id}',
+                    'url' => '/users/{id}',
                     'description' => 'Gets user data'
                 ];
                 $editPoint = [
                     'method' => 'put',
-                    'url' => '/User-{user id}',
+                    'url' => '/users/{id}',
                     'params' => [
                         'required' => ['userName', 'name'],
                     ],
@@ -85,7 +85,7 @@
                 ];
                 $editPoint2 = [
                     'method' => 'patch',
-                    'url' => '/User-{user id}',
+                    'url' => '/users/{id}',
                     'params' => [
                         'optional' => ['name', 'userName']
                     ],
@@ -93,7 +93,7 @@
                 ];
                 $deletePoint = [
                     'method' => 'delete',
-                    'url' => '/User-{user id}',
+                    'url' => '/users/{id}',
                     'description' => 'Deletes a user'
                 ];
 
